@@ -2,7 +2,7 @@ import string
 
 
 def dscr_prcsd(dscr):
-    #supprime la ponctuation
+    # supprime la ponctuation
     dscr = dscr.translate(str.maketrans('', '', string.punctuation))
     # Mettre en minuscules
     dscr = dscr.lower()

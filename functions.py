@@ -46,8 +46,7 @@ def new_dscr(disc_process,output_file):
         with open(output_file+"/"+ filename, "w" ,encoding="utf-8") as cleaned_f:
             cleaned_f.write(cleaned_dscr)
 
-def TF():
-
-
+def TF(word,text):
+    for word in text:
 
 

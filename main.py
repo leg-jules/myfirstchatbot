@@ -10,5 +10,5 @@ if __name__ == "__main__":
 directory = "./speeches"
 files_names = list_of_files(directory, "txt")
 print(list(files_names))
-
 new_dscr("speeches","cleaned")
+

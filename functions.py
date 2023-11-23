@@ -41,15 +41,12 @@ def new_dscr(disc_process,output_file):
         with open(disc_process +"/"+ filename, "r" ,encoding="utf-8") as f:
             dscr = f.read()
         # traiter le texte
-        cleaned_dscr = lower(dscr)
+        cleaned_dscr = re.sub(r"[^\w\s]", "", lower(dscr))
 
         with open(output_file+"/"+ filename, "w" ,encoding="utf-8") as cleaned_f:
             cleaned_f.write(cleaned_dscr)
 
-s = "string. With. Punctuation?"
-out = re.sub(r"[^\w\s]", "", s)
-print(out)
-
+def TF():
 
 
 

@@ -42,12 +42,12 @@ def lower(text):     # Convertit le texte en minuscules
 def new_dscr(disc_process,output_file):
     # lire le fichier
     for filename in os.listdir(disc_process):
-        with open(disc_process +"/"+ filename, "r") as f:
+        with open(disc_process +"/"+ filename, "r" ,encoding="utf-8") as f:
             dscr = f.read()
         # traiter le texte
         cleaned_dscr = lower(dscr)
 
-        with open(output_file+"/"+ filename, "w") as cleaned_f:
+        with open(output_file+"/"+ filename, "w" ,encoding="utf-8") as cleaned_f:
             cleaned_f.write(cleaned_dscr)
 
 

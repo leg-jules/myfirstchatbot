@@ -1,4 +1,5 @@
 import os
+import re
 def extract_president_name(filename):
     # Extrait le nom du président du nom du fichier
     parts = filename.split('_')
@@ -6,7 +7,6 @@ def extract_president_name(filename):
         return parts[1]
     else:
         return None
-
 def associate_president_firstname(president_name):
     # Associe un prénom à chaque nom de président
     first_names = {"Chirac": "Jacques",
@@ -32,10 +32,6 @@ def list_of_files(speeches,extension):
             files_names.append(filename)
     return files_names
 
-
-
-
-
 def lower(text):     # Convertit le texte en minuscules
     text2 = text.lower()
     return(text2)
@@ -50,6 +46,9 @@ def new_dscr(disc_process,output_file):
         with open(output_file+"/"+ filename, "w" ,encoding="utf-8") as cleaned_f:
             cleaned_f.write(cleaned_dscr)
 
+s = "string. With. Punctuation?"
+out = re.sub(r"[^\w\s]", "", s)
+print(out)
 
 
 

@@ -1,0 +1,8 @@
+chirac1 = "Nomination_Chirac1"
+chirac2 = "Nomination_Chirac2.txt"
+mitterand1 = "Nomination_Mitterrand.txt"
+mitterand2 = "Nominationn_Mitterrand2.txt"
+sarkozy = "Nomination_Sarkozy.txt"
+macron = "Nomination_Macron.txt"
+hollande = "Nomination_Hollande.txt"
+giscard = "Nomination_Giscard dEstaing.txt"

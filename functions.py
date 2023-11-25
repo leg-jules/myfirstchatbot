@@ -6,7 +6,7 @@ def extract_president_name(filename):
     # Extrait le nom du président du nom du fichier
     parts = filename.split('_')
     if len(parts) >= 2:
-        return parts[1]
+        return parts[1]   #détache le nom en plusieurs parties et garde le nom
     else:
         return None
 
@@ -20,7 +20,6 @@ def associate_president_firstname(president_name):
                    "Sarkozy": "Nicolas",
                    "Hollande": "François", }
 
-    # Ajouter d'autres présidents pour 1 et 2
     return first_names.get(president_name, "Prénom inconnu")
 
 
@@ -41,7 +40,7 @@ def list_of_files(speeches, extension):
 
 def lower(text):  # Convertit le texte en minuscules
     text2 = text.lower()
-    return (text2)
+    return text2
 
 
 def new_dscr(disc_process, output_file):
@@ -54,7 +53,15 @@ def new_dscr(disc_process, output_file):
 
         with open(output_file + "/" + filename, "w", encoding="utf-8") as cleaned_f:
             cleaned_f.write(cleaned_dscr)
+#enregisrte dans le bon fichier
 
+def tf(text):
+    words = text.split()
+    tf_dict = {}
 
-def TF(word, text):
-    for word in text:
+    for word in words:
+        tf_dict[word] = tf_dict.get(word, 0) + 1  #crée un compteur à valeur de 1 si le mot n'existe pas
+
+    return tf_dict
+
+def idf():

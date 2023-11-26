@@ -106,3 +106,28 @@ def mot_peu_important(tfidf_matrix, words):
     peu_important = [word for word in words if all(tfidf_matrix[words.index(word)]) == 0]
     return peu_important
 
+def highest_tfidf_words(tfidf_matrix, words, n=1):
+    max_tfidf = [max(row) for row in tfidf_matrix]
+    highest_tfidf_indices = sorted(range(len(max_tfidf)), key=lambda k: max_tfidf[k], reverse=True)[:n]
+    return [words[i] for i in highest_tfidf_indices]
+
+def most_repeated_words_by_president(tfidf_matrix, words, president_name):
+    president_indices = [i for i, word in enumerate(words) if president_name.lower() in word.lower()]
+    president_tfidf_sum = [sum(tfidf_matrix[:, idx]) for idx in president_indices]
+    most_repeated_index = president_indices[president_tfidf_sum.index(max(president_tfidf_sum))]
+    return words[most_repeated_index]
+
+def president_mentions_of_nation(tfidf_matrix, words):
+    nation_indices = [i for i, word in enumerate(words) if 'nation' in word.lower()]
+    president_nation_counts = [sum(tfidf_matrix[:, idx] > 0) for idx in nation_indices]
+    most_mentions_index = nation_indices[president_nation_counts.index(max(president_nation_counts))]
+    return words[most_mentions_index]
+
+def first_president_to_mention_climate_ecology(tfidf_matrix, words):
+    climate_ecology_indices = [i for i, word in enumerate(words) if 'climate' in word.lower() or 'ecology' in word.lower()]
+    first_president_index = min([next(i for i, value in enumerate(tfidf_matrix[:, idx] > 0) if value) for idx in climate_ecology_indices])
+    return words[first_president_index]
+
+def common_words_among_presidents(tfidf_matrix, words):
+    common_words_indices = [i for i in range(len(words)) if all(tfidf_matrix[:, i] > 0)]
+    return [words[i] for i in common_words_indices]

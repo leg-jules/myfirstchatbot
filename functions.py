@@ -102,15 +102,17 @@ def tfidf_matrix(corpus_directory, tf, idf):
             matrix.append(list(tfidf_vector.values()))
             words.extend(tfidf_vector.keys())
 
+
+
 def mot_peu_important(tfidf_matrix, words):
     peu_important = [word for word in words if all(tfidf_matrix[words.index(word)]) == 0]
-    return peu_important
+    return peu_important               # retourne les mots les moins importants
 
 def highest_tfidf_words(tfidf_matrix, words, n=1):
     max_tfidf = [max(row) for row in tfidf_matrix]
     highest_tfidf_indices = sorted(range(len(max_tfidf)), key=lambda k: max_tfidf[k], reverse=True)[:n]
     return [words[i] for i in highest_tfidf_indices]
-
+            # retourne les mots ayant le plus gros score idf
 def most_repeated_words_by_president(tfidf_matrix, words, president_name):
     president_indices = [i for i, word in enumerate(words) if president_name.lower() in word.lower()]
     president_tfidf_sum = [sum(tfidf_matrix[:, idx]) for idx in president_indices]
@@ -131,3 +133,69 @@ def first_president_to_mention_climate_ecology(tfidf_matrix, words):
 def common_words_among_presidents(tfidf_matrix, words):
     common_words_indices = [i for i in range(len(words)) if all(tfidf_matrix[:, i] > 0)]
     return [words[i] for i in common_words_indices]
+
+
+def load_text_from_file(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return file.read()
+
+
+def get_tfidf_for_word(word, tfidf_matrix, words, directory):
+    word_index = words.index(word)
+    idf = calculate_idf(word, directory)
+
+    tfidf_values = [row[word_index] * idf for row in tfidf_matrix]
+    return tfidf_values
+
+
+def calculate_idf(word, directory):
+    document_count = len(list_of_files(directory, "txt"))
+    documents_with_word = sum(
+        1 for filename in list_of_files(directory, "txt") if word_in_document(word, os.path.join(directory, filename)))
+
+    return math.log(document_count / (1 + documents_with_word))
+
+
+def word_in_document(word, document_path):
+    with open(document_path, 'r', encoding="utf-8") as file:
+        document = file.read()
+    return word in document
+
+
+def list_least_important_words(tfidf_matrix, words, directory):
+    least_important_words = []
+
+    for word in words:
+        tfidf_values = get_tfidf_for_word(word, tfidf_matrix, words, directory)
+        if all(value == 0 for value in tfidf_values):
+            least_important_words.append(word)
+
+    return least_important_words
+
+
+def list_most_important_words(tfidf_matrix, words):
+    max_tfidf_values = [max(row) for row in tfidf_matrix]
+    max_tfidf_index = max_tfidf_values.index(max(max_tfidf_values))
+
+    most_important_words = [words[i] for i, value in enumerate(tfidf_matrix[max_tfidf_index]) if
+                            value == max_tfidf_values[max_tfidf_index]]
+
+    return most_important_words
+
+
+def most_repeated_words_by_president(president, words, tfidf_matrix, directory):
+    president_files = [filename for filename in list_of_files(directory, "txt") if
+                       president.lower() in filename.lower()]
+    if not president_files:
+        return None
+
+    president_text = " ".join([load_text_from_file(os.path.join(directory, filename)) for filename in president_files])
+    cleaned_president_text = re.sub(r"[^\w\s]", "", lower(president_text))
+
+    president_words = cleaned_president_text.split()
+    tfidf_values = {word: get_tfidf_for_word(word, tfidf_matrix, words, directory) for word in president_words}
+
+    most_repeated_words = [word for word, values in tfidf_values.items() if
+                           sum(values) == max(sum(v) for v in tfidf_values.values())]
+
+    return most_repeated_words

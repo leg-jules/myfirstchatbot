@@ -1,9 +1,5 @@
 from functions import *
 import os
-if __name__ == "__main__":
-    input_file = input("Saisir un texte à convertir:")
-    process_file = input_file
-    print(input_file)
 
 # Call of the function
 directory = "./speeches"
@@ -35,7 +31,7 @@ if __name__ == "__main__":
             print("Mots les moins importants:", mot_peu_important(tfidf_matrix, words))
         elif choice == "2":
             n = int(input("Nombre de mots à afficher: "))
-            print(f"Mot(s) avec le score TF-IDF le plus élevé: {highest_tfidf_words(tfidf_matrix, words, n)}")
+            print(f"Mot(s) avec le score TF-IDF le plus élevé: {highest_tfidf_words(tfidf_matrix, words, n=1)}")
         elif choice == "3":
             print("Mot(s) le(s) plus répété(s) par le président Chirac:", most_repeated_words_by_president(tfidf_matrix, words, "Chirac"))
         elif choice == "4":

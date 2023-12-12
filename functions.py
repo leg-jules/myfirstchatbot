@@ -66,42 +66,55 @@ def tf(text):
     return tf_dict
 
 def idf(corpus_directory):
-    # Dictionnaire pour stocker le nombre de documents dans lesquels chaque mot apparaît
-    doc_count = Counter()
+    # Créer un dictionnaire pour stocker le nombre de documents dans lesquels chaque mot apparaît
+    doc_count = {}
 
-    # Compter le nombre de documents dans lesquels chaque mot apparaît
+    # Parcourir tous les documents du corpus
     for filename in os.listdir(corpus_directory):
         with open(os.path.join(corpus_directory, filename), 'r', encoding='utf-8') as file:
             words = file.read().split()
-            # Utiliser un ensemble pour s'assurer que chaque document contribue une seule fois par mot
-            unique_words = set(words)
-            doc_count.update(unique_words)
 
-    # Nombre total de documents dans le corpus
-    total_docs = len(os.listdir(corpus_directory))
+            # Mettre à jour le dictionnaire `doc_count` avec le nombre de documents pour chaque mot
+            for word in words:
+                if word not in doc_count:
+                    doc_count[word] = 0
+                doc_count[word] += 1
 
-    # Calcul de l'IDF pour chaque mot
-    idf_dict = {word: math.log(total_docs / (count + 1)) for word, count in doc_count.items()}
+    # Calculer l'IDF pour chaque mot
+    idf_dict = {word: math.log(len(os.listdir(corpus_directory)) / count) for word, count in doc_count.items()}
 
     return idf_dict
 
 def tfidf_matrix(corpus_directory, tf, idf):
-    # Liste pour stocker les vecteurs IDF pour chaque mot
-    idf_vector = idf([document.split() for document in os.listdir(corpus_directory)])
+    # Create a dictionary to store IDF values for each word
+    idf_dict = {}
+    for document in os.listdir(corpus_directory):
+        document_words = document.split()
+        # Calculate IDF for each word in the corpus
+        for word in set(document_words):
+            idf_dict[word] = idf(document_words)
 
-    # Créer la matrice TF-IDF
-    matrix = []
-    words = []
+    # Create a TF-IDF matrix
+    tfidf_matrix = []
+    word_list = []
     for filename in os.listdir(corpus_directory):
         with open(os.path.join(corpus_directory, filename), 'r', encoding='utf-8') as file:
             document = file.read().split()
-            # Calculer le vecteur TF pour chaque document
-            tf_vector = tf(document)
-            # Multiplication par le vecteur IDF pour obtenir le vecteur TF-IDF
-            tfidf_vector = {word: tf * idf_vector[word] for word, tf in tf_vector.items()}
-            matrix.append(list(tfidf_vector.values()))
-            words.extend(tfidf_vector.keys())
 
+            # Calculate TF vector for each document
+            tf_vector = tf(document)
+
+            # Calculate TF-IDF vector by multiplying TF with IDF values
+            tfidf_vector = {
+                word: tf * idf_dict[word]
+                for word, tf in tf_vector.items()
+            }
+            tfidf_matrix.append(list(tfidf_vector.values()))
+
+            # Append unique words to the word list
+            word_list.extend(tfidf_vector.keys())
+
+    return tfidf_matrix, word_list
 
 
 def mot_peu_important(tfidf_matrix, words):
@@ -109,10 +122,14 @@ def mot_peu_important(tfidf_matrix, words):
     return peu_important               # retourne les mots les moins importants
 
 def highest_tfidf_words(tfidf_matrix, words, n=1):
-    max_tfidf = [max(row) for row in tfidf_matrix]
-    highest_tfidf_indices = sorted(range(len(max_tfidf)), key=lambda k: max_tfidf[k], reverse=True)[:n]
+    # Extract the highest TF-IDF scores
+    max_tfidf = tfidf_matrix.max(axis=1)
+
+    # Find the indices of the highest TF-IDF scores
+    highest_tfidf_indices = max_tfidf.argsort()[-n:][::-1]
+
+    # Return the corresponding words
     return [words[i] for i in highest_tfidf_indices]
-            # retourne les mots ayant le plus gros score idf
 def most_repeated_words_by_president(tfidf_matrix, words, president_name):
     president_indices = [i for i, word in enumerate(words) if president_name.lower() in word.lower()]
     president_tfidf_sum = [sum(tfidf_matrix[:, idx]) for idx in president_indices]

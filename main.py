@@ -1,3 +1,4 @@
+# Authors: Legalais Jules et Steed Dalphase
 from functions import *
 import os
 
@@ -15,6 +16,21 @@ if __name__ == "__main__":
         text = file.read()
     words = text.split()
 
+    tf_fichiers=[]
+
+    for file in os.listdir("cleaned"):
+        with open("cleaned/"+file, 'r', encoding="utf-8") as f:
+            a = f.read()
+            gf = calcul_tf(a)
+            break
+            tf_fichiers.append(gf)
+    print(tf_fichiers)
+
+ 
+
+
+
+
     while True:
         print("\nMenu:")
         print("1. Afficher les mots les moins importants")
@@ -24,8 +40,10 @@ if __name__ == "__main__":
         print("5. Indiquer le premier président à parler du climat et/ou de l’écologie")
         print("6. Hormis les mots dits « non importants », quel(s) est(sont) le(s) mot(s) que tous les présidents ont évoqués")
         print("0. Quitter")
-
+        print("9. Secret")
         choice = input("Sélectionnez une option (0-6): ")
+
+
 
         if choice == "1":
             print("Mots les moins importants:", mot_peu_important(tfidf_matrix, words))
@@ -37,13 +55,17 @@ if __name__ == "__main__":
         elif choice == "4":
             print("Président(s) ayant parlé de la « Nation » et celui qui l’a répété le plus de fois:", president_mentions_of_nation(tfidf_matrix, words))
         elif choice == "5":
-            print("Premier président à parler du climat et/ou de l’écologie:", first_president_to_mention_climate_ecology(tfidf_matrix, words))
+            print("Premier président à parler du climat et/ou de l’écologie:", first_president_to_mention_climate_ecology(tf_fichiers, words))
         elif choice == "6":
-            print("Mot(s) évoqué(s) par tous les présidents hormis les mots dits « non importants »:", common_words_among_presidents(tfidf_matrix, words))
+             print("Mot(s) évoqué(s) par tous les présidents hormis les mots dits « non importants »:", common_words_among_presidents(tfidf_matrix, words))
+        elif choice == "9":
+             print(im)
+
         elif choice == "0":
             print("Programme terminé.")
             break
         else:
             print("Option invalide. Veuillez choisir un nombre entre 0 et 6.")
+
 
 

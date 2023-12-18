@@ -1,4 +1,4 @@
-chirac1 = "Nomination_Chirac1"
+chirac1 = "Nomination_Chirac1.txt"
 chirac2 = "Nomination_Chirac2.txt"
 mitterand1 = "Nomination_Mitterrand.txt"
 mitterand2 = "Nominationn_Mitterrand2.txt"

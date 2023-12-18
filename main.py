@@ -6,7 +6,8 @@ import os
 directory = "./speeches"
 files_names = list_of_files(directory, "txt")
 print(list(files_names))
-new_dscr("speeches", "cleaned")
+new_dscr("speeches")
+print(tfidf_matrix("cleaned")
 
 if __name__ == "__main__":
     # Chargement des données
@@ -26,7 +27,7 @@ if __name__ == "__main__":
             tf_fichiers.append(gf)
     print(tf_fichiers)
 
- 
+    tfidf_matrix("cleaned")
 
 
 

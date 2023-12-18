@@ -112,32 +112,76 @@ def tfidf_matrix(corpus_directory):
 
 print(tfidf_matrix("cleaned"))
 
-def mot_peu_important(tfidf_matrix, words):
-    peu_important = [word for word in words if all(tfidf_matrix[words.index(word)]) == 0]
+def mot_peu_important(tfidf_matrix):
+    peu_important = []
+    for word in tfidf_matrix:
+        if all(tfidf_matrix == 0):
+            peu_important.append(word)
     return peu_important
 
-def highest_tfidf_words(tfidf_matrix, words, n=1):
-    max_tfidf = [max(row) for row in tfidf_matrix]
+def highest_tfidf_words(tfidf_matrix, n=1):
+    max_tfidf = []
+    for row in tfidf_matrix:
+        max_tfidf.append(max(row))
+
     highest_tfidf_indices = sorted(range(len(max_tfidf)), key=lambda k: max_tfidf[k], reverse=True)[:n]
-    return [words[i] for i in highest_tfidf_indices]
+    highest_tfidf_words = []
+    for index in highest_tfidf_indices:
+        highest_tfidf_words.append(list(tfidf_matrix)[index])
 
-def most_repeated_words_by_president(tfidf_matrix, words, president_name):
-    president_indices = [i for i, word in enumerate(words) if president_name.lower() in word.lower()]
-    president_tfidf_sum = [sum(tfidf_matrix[:, idx]) for idx in president_indices]
+    return highest_tfidf_words
+
+def most_repeated_words_by_president(tfidf_matrix, president_name):
+    president_indices = []
+    for index, word in enumerate(tfidf_matrix):
+        if president_name.lower() in word.lower():
+            president_indices.append(index)
+
+    president_tfidf_sum = []
+    for idx in president_indices:
+        tfidf_sum = sum(tfidf_matrix[:, idx])
+        president_tfidf_sum.append(tfidf_sum)
+
     most_repeated_index = president_indices[president_tfidf_sum.index(max(president_tfidf_sum))]
-    return words[most_repeated_index]
+    most_repeated_word = list(tfidf_matrix)[most_repeated_index]
 
-def president_mentions_of_nation(tfidf_matrix, words):
-    nation_indices = [i for i, word in enumerate(words) if 'nation' in word.lower()]
-    president_nation_counts = [sum(tfidf_matrix[:, idx] > 0) for idx in nation_indices]
+    return most_repeated_word
+
+def president_mentions_of_nation(tfidf_matrix):
+    nation_indices = []
+    for index, word in enumerate(tfidf_matrix):
+        if 'nation' in word.lower():
+            nation_indices.append(index)
+
+    president_nation_counts = []
+    for idx in nation_indices:
+        nation_counts = sum(tfidf_matrix[:, idx] > 0)
+        president_nation_counts.append(nation_counts)
+
     most_mentions_index = nation_indices[president_nation_counts.index(max(president_nation_counts))]
-    return words[most_mentions_index]
+    most_mentions_word = list(tfidf_matrix)[most_mentions_index]
 
-def first_president_to_mention_climate_ecology(tfidf_matrix, words):
-    climate_ecology_indices = [i for i, word in enumerate(words) if 'climate' in word.lower() or 'ecology' in word.lower()]
-    first_president_index = min([next(i for i, value in enumerate(tfidf_matrix[:, idx] > 0) if value) for idx in climate_ecology_indices])
-    return words[first_president_index]
+    return most_mentions_word
 
-def common_words_among_presidents(tfidf_matrix, words):
-    common_words_indices = [i for i in range(len(words)) if all(tfidf_matrix[:, i] > 0)]
-    return [words[i] for i in common_words_indices]
+def first_president_to_mention_climate_ecology(tfidf_matrix):
+    climate_ecology_indices = []
+    for index, word in enumerate(tfidf_matrix):
+        if 'climate' in word.lower() or 'ecology' in word.lower():
+            climate_ecology_indices.append(index)
+
+    first_mention_index = min([i for i, value in enumerate(tfidf_matrix[:, id]) if value > 0 for idx in climate_ecology_indices])
+    first_mention_president = list(tfidf_matrix)[first_mention_index]
+
+    return first_mention_president
+
+def common_words_among_presidents(tfidf_matrix):
+    common_words_indices = []
+    for index in range(len(tfidf_matrix)):
+        if all(tfidf_matrix[:, index] > 0):
+            common_words_indices.append(index)
+
+    common_words = []
+    for index in common_words_indices:
+        common_words.append(list(tfidf_matrix)[index])
+
+    return common_words

@@ -1,3 +1,12 @@
+#                         ____ _              __           __            __   __            __
+#    ____ ___   __  __   / __/(_)_____ _____ / /_   _____ / /_   ____ _ / /_ / /_   ____   / /_
+#   / __ `__ \ / / / /  / /_ / // ___// ___// __/  / ___// __ \ / __ `// __// __ \ / __ \ / __/
+#  / / / / / // /_/ /  / __// // /   (__  )/ /_   / /__ / / / // /_/ // /_ / /_/ // /_/ // /_
+# /_/ /_/ /_/ \__, /  /_/  /_//_/   /____/ \__/   \___//_/ /_/ \__,_/ \__//_.___/ \____/ \__/
+#            /____/
+
+
+
 # Authors: Legalais Jules et Steed Dalphase
 from functions import *
 import os
@@ -7,29 +16,13 @@ directory = "./speeches"
 files_names = list_of_files(directory, "txt")
 print(list(files_names))
 new_dscr("speeches")
-print(tfidf_matrix("cleaned")
+print(tfidf_matrix("cleaned"))
 
 if __name__ == "__main__":
     # Chargement des données
     speeches_directory = "cleaned"
     files_names = list_of_files(speeches_directory, "txt")
-    with open(os.path.join(speeches_directory, files_names[0]), 'r', encoding="utf-8") as file:
-        text = file.read()
-    words = text.split()
-
-    tf_fichiers=[]
-
-    for file in os.listdir("cleaned"):
-        with open("cleaned/"+file, 'r', encoding="utf-8") as f:
-            a = f.read()
-            gf = calcul_tf(a)
-            break
-            tf_fichiers.append(gf)
-    print(tf_fichiers)
-
-    tfidf_matrix("cleaned")
-
-
+    print(list(files_names))
 
 
     while True:
@@ -47,26 +40,22 @@ if __name__ == "__main__":
 
 
         if choice == "1":
-            print("Mots les moins importants:", mot_peu_important(tfidf_matrix, words))
+            print(mot_peu_important(tfidf_matrix)
         elif choice == "2":
             n = int(input("Nombre de mots à afficher: "))
-            print(f"Mot(s) avec le score TF-IDF le plus élevé: {highest_tfidf_words(tfidf_matrix, words, n=1)}")
+            print(highest_tfidf_words(tfidf_matrix, words, n=n))
         elif choice == "3":
-            print("Mot(s) le(s) plus répété(s) par le président Chirac:", most_repeated_words_by_president(tfidf_matrix, words, "Chirac"))
+            print(most_repeated_words_by_president(tfidf_matrix, words, "Chirac"))
         elif choice == "4":
-            print("Président(s) ayant parlé de la « Nation » et celui qui l’a répété le plus de fois:", president_mentions_of_nation(tfidf_matrix, words))
+            print(president_mentions_of_nation(tfidf_matrix, words))
         elif choice == "5":
-            print("Premier président à parler du climat et/ou de l’écologie:", first_president_to_mention_climate_ecology(tf_fichiers, words))
+            print(first_president_to_mention_climate_ecology(tf_fichiers, words))
         elif choice == "6":
-             print("Mot(s) évoqué(s) par tous les présidents hormis les mots dits « non importants »:", common_words_among_presidents(tfidf_matrix, words))
-        elif choice == "9":
-             print(im)
-
+            print(common_words_among_presidents(tfidf_matrix, words))
         elif choice == "0":
             print("Programme terminé.")
             break
         else:
             print("Option invalide. Veuillez choisir un nombre entre 0 et 6.")
-
 
 

@@ -11,6 +11,24 @@
 
 from functions import *
 
+
+
+
+question_starters = {
+    "qui": "Il est intéressant de noter que...",
+    "quand": "Selon le corpus, le président a mentionné ce sujet...",
+    "pourquoi": "Il semblerait que le président ait attaché une importance particulière à..."
+}
+filenames =["cleaned/Chirac.txt", "cleaned/Giscard.txt", "cleaned/Hollande.txt", "cleaned/Macron.txt", "cleaned/Mitterrand.txt", "cleaned/Pompidou.txt", "cleaned/Sarkozy.txt"]
+def chatbot_mode():
+    while True:
+        question = input("Question: ")
+        response = generate_response_with_question_starter(question, tfidf_matrix, filenames)
+        response_list = list(response)
+        print("Réponse: " + response_list[0])
+        if response_list[0] == "Je ne sais pas":
+            break
+
 if __name__ == "__main__":
     # Import des bibliothèques
     import random
@@ -19,7 +37,9 @@ if __name__ == "__main__":
     speeches_directory = "cleaned"
     files_names = list_of_files(speeches_directory, "txt")
 
-    n = random.randint(0, 100)
+    question = input("Entrez votre question: ")
+
+    n = random.randint(0, 10000)
     vies = 10
     appreciation = "?"
 

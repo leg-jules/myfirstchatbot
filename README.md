@@ -4,7 +4,7 @@ Vous avez du récupérer notre programme myfirstchatbot sur Git, voici maintenan
 
 •Lors du lancement le programme vous proposera des options, les 6 premières vous permettent d'obtenir des informations concernant les 
 textes.
- L'option "0" vous permet de quitter le programme.
+L'option "0" vous permet de quitter le programme.
 L'option "9" vous permet de lancer un mini-jeu dont le but est de trouver un nombre aléatoire entre 0 et 10000, avec 10 vies.
 
 
